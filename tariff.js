@@ -1,12 +1,34 @@
+const tariff = {     
+    "Bermuda":	24.07,
+    "Argentina": 6.88,
+    "Panama": 5.77,
+    "South Korea": 5.48,
+    "Uruguay": 5.29,
+    "French Polynesia":	4.83,
+    "Saudi Arabia":	4.23,
+    "Qatar": 3.55,
+    "UAE":	3.28,
+    "Japan":2.22,
+    "United States": 1.52,
+    "Canada":	1.49,
+    "Czech Republic":	1.48,
+    "Greece": 1.48,
+    "Belgium": 	1.48,
+    "Netherlands": 1.48,
+    "Austria":	1.48,
+    "France":	1.48,
+    "Finland":	1.48,
+    "Italy":	1.48,
+    "Poland":	1.48,
+    "Sweden":	1.48,
+    "Ireland":	1.48,
+    "Spain":	1.48,
+    "Hungary":	1.48,
+    "Australia": 0.71,
+    "Singapore": 0.05
+};
 
-import fs from 'fs/promises';
+function getTariff(inputCountry) {
+    console.log(tariff[inputCountry]);
+}
 
-fs.readFile('tariff.json', function(err, data) {
-    console.log(err);
-});
-// fetch('tariff.json')
-//   .then(response => response.text())
-//   .then(data => {
-//   	// Do something with your data
-//   	console.log(data);
-//   });

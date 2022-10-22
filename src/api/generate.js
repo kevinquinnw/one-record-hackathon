@@ -67,7 +67,7 @@ for (let i = 0; i < 10; i++){
     tempObj.dateDelivered = delivered;
     tempObj.dateShipped = shipped;
     tempObj.shipmentID = `${i + 1}`;
-    tempObj.driverID = `${(i + 1)%5}`;
+    tempObj.driverID = `${(i%5) + 1}`;
     let originIndex = getRandomInt(cities.length - 1);
     tempObj.origin = cities[originIndex];
 

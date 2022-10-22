@@ -2,28 +2,64 @@ import  {Shipments} from "./Shipments.js";
 import fs from "fs/promises";
 //const fs = require('fs');
 
-let cities = ['Lexington', 'Fayette',
-'Kentucky','Fort Wayne',
-'Indiana','Philadelphia',
-'Pennsylvania','Reno',
-'Nevada','Garland',
-'Texas','Memphis',
-'Tennessee','Henderson',
-'Nevada','Pittsburgh',
-'Pennsylvania','Wichita',
-'Kansas','Sacramento',
-'California','Lubbock',
-'Texas','Oklahoma City',
-'Oklahoma','Indianapolis',
-'Indiana','Greensboro',
-'North Carolina','Anchorage',
-'Alaska','El Paso',
-'Texas','Cincinnati',
-'Ohio','Chandler',
-'Arizona','New Orleans',
-'Louisiana','Buffalo',
-'New York','Bakersfield',
-'California'];
+let cities = ["Bermuda",
+    "Argentina",
+    "Panama",
+    "South Korea",
+    "Uruguay",
+    "French Polynesia",
+    "Saudi Arabia",
+    "Qatar",
+    "UAE",
+    "Japan",
+    "United States",
+    "Canada",
+    "Czech Republic",
+    "Greece",
+    "Belgium",
+    "Netherlands",
+    "Austria",
+    "France",
+    "Finland",
+    "Italy",
+    "Poland",
+    "Sweden",
+    "Ireland",
+    "Spain",
+    "Hungary",
+    "Australia",
+    "Singapore"
+];
+
+let tariffs =  {
+    "Bermuda":	24.07,
+    "Argentina": 6.88,
+    "Panama": 5.77,
+    "South Korea": 5.48,
+    "Uruguay": 5.29,
+    "French Polynesia":	4.83,
+    "Saudi Arabia":4.23,
+    "Qatar":3.55,
+    "UAE":3.28,
+    "Japan":2.22,
+    "United States":1.52,
+    "Canada":1.49,
+    "Czech Republic":1.48,
+    "Greece":1.48,
+    "Belgium": 1.48,
+    "Netherlands":1.48,
+    "Austria":1.48,
+    "France":1.48,
+    "Finland":1.48,
+    "Italy":1.48,
+    "Poland":1.48,
+    "Sweden":1.48,
+    "Ireland":1.48,
+    "Spain":1.48,
+    "Hungary":1.48,
+    "Australia":0.71,
+    "Singapore": 0.05
+}
 
 let packages = [
     "Game Console", "Kitchen Utensils", "Clothing", "Chemicals", "Cleaning Products", "Bath Products", "Oranges", "Bread", "Metal",
@@ -84,6 +120,7 @@ export function GenerateShipments(){
             destIndex = getRandomInt(cities.length - 1);
         }
         tempObj.destination = cities[destIndex];
+        tempObj.tariff = tariffs[cities[destIndex]];
 
         let stops = [];
         let randStop = 0.0;
@@ -147,12 +184,14 @@ export function GeneratePackages(index, Shipment){
         }
         fs.appendFile("./text.txt", `\n`);
     
-    console.log(packArr);
+    //console.log(packArr);
     return packArr;
 }
 
-for (let i = 5; i < Shipments.length; i++){
+for (let i = 0; i < Shipments.length; i++){
     GeneratePackages(i+1, Shipments[i]);
 }
+
+//GenerateShipments();
 
 

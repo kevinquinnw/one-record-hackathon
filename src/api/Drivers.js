@@ -1,6 +1,35 @@
 export const Drivers = [
-    {name: "Jacob", id: "123", shipmentHistory: [], offences: []}
-];
+    {
+        name: "Bill",
+        id: 1,
+        cleanRecord: true,
+        vehicleID: "1" 
+    }, 
+    {
+        name: "Bob",
+        id: 2,
+        cleanRecord: true,
+        vehicleID: "2" 
+    }, 
+    {
+        name: "Jacob",
+        id: 3,
+        cleanRecord: false,
+        vehicleID: "3"
+    }, 
+    {
+        name: "Jane",
+        id: 4,
+        cleanRecord: true,
+        vehicleID: "4" 
+    }, 
+    {
+        name: "John",
+        id: 5,
+        cleanRecord: true,
+        vehicleID: "5" 
+    }
+]
 
 let listOfOffences = [
     "Unnecessary Stops", "Late Deliveries", "Witholding Information", "Suspicious Affiliation"

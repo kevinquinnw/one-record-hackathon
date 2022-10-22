@@ -56,6 +56,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
+function GenerateShipments(){
 
 let shipArr = [];
 let tempObj = {}
@@ -88,10 +89,13 @@ for (let i = 0; i < 10; i++){
         stops.push(cities[destIndex]);
     }
 
-    if (Math.random() > 0.7){
-        tempObj.dangerFlag = true;
+    //inspect, failed, passed
+    if (Math.random() > 0.75){
+        tempObj.dangerFlag = "Inspect";
+    }else if(0.5 <= Math.random() <= 0.75){
+        tempObj.dangerFlag = "Failed";
     }else{
-        tempObj.dangerFlag = false;
+        tempObj.dangerFlag = "Passed"
     }
 
     tempObj.currentLocation = stops[stops.length - 1];
@@ -102,3 +106,16 @@ for (let i = 0; i < 10; i++){
 }
 
 console.log(shipArr);
+}
+
+
+function GeneratePackages(){
+    let packageObj = {}
+    for (let i = 0; i < Shipments.length; i++){
+        for (let j = 0; j < 10;j++){
+
+        }
+    }
+}
+
+GenerateShipments();

@@ -1,4 +1,4 @@
-[
+export const Shipments = [
     {
       dateExpected: 'Mon May 23 2022',
       dateDelivered: 'Thu May 19 2022',

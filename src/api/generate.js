@@ -112,10 +112,15 @@ console.log(shipArr);
 function GeneratePackages(){
     let packageObj = {}
     for (let i = 0; i < Shipments.length; i++){
+        console.log(Shipments[i]);
+
         for (let j = 0; j < 10;j++){
+
+
 
         }
     }
 }
 
-GenerateShipments();
+// GenerateShipments();
+GeneratePackages();

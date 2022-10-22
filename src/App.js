@@ -1,4 +1,4 @@
-import logo from './logo.svg';
+import logo from './ajk.png';
 import './App.css';
 import React, { useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
@@ -6,72 +6,38 @@ import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import PackageBadge from './components/PackageBadge';
 import Modal from 'react-bootstrap/Modal';
-
+import PackageContent from './components/PackageContent/PackageContent';
+import { ModalFooter } from 'react-bootstrap';
+import packageData from './json/packageData.json';
+import { Shipments } from './api/Shipments';
 
 function App() {
-  const headers = ['Package ID', 'Origin', 'Destination', 'Current Location', 'Flag Level']
-  const cities =['Lexington', 'Fayette',
-    'Kentucky','Fort Wayne',
-    'Indiana','Philadelphia',
-    'Pennsylvania','Reno',
-    'Nevada','Garland',
-    'Texas','Memphis',
-    'Tennessee','Henderson',
-    'Nevada','Pittsburgh',
-    'Pennsylvania','Wichita',
-    'Kansas','Sacramento',
-    'California','Lubbock',
-    'Texas','Oklahoma City',
-    'Oklahoma','Indianapolis',
-    'Indiana','Greensboro',
-    'North Carolina','Anchorage',
-    'Alaska','El Paso',
-    'Texas','Cincinnati',
-    'Ohio','Chandler',
-    'Arizona','New Orleans',
-    'Louisiana','Buffalo',
-    'New York','Bakersfield',
-    'California']
+  const headers = ['Package ID','Origin', 'Destination', 'Current Location', 'Date Expected', 'Status']
+  const [openPackageModal, setOpenPackageModal] = useState(false);
+  const [currentPackage, setCurrentPackage] = useState('');
 
-    const shuffleFunction = (array) => {
-      let currentIndex = array.length,  randomIndex;
-
-      // While there remain elements to shuffle.
-      while (currentIndex != 0) {
-
-        // Pick a remaining element.
-        randomIndex = Math.floor(Math.random() * currentIndex);
-        currentIndex--;
-
-        // And swap it with the current element.
-        [array[currentIndex], array[randomIndex]] = [
-          array[randomIndex], array[currentIndex]];
-      }
-
-      return array;
+const handleModal = (boxId) => {
+  console.log(boxId)
+  setCurrentPackage(packageData[boxId-1])
+  setOpenPackageModal(true)
 }
 
-const destinations = shuffleFunction(cities);
-const currentLocations = shuffleFunction(destinations);
-const flagLevels = ['Inspect', 'Failed', 'Passed'];
-
-const badgeHandler = (flag) => {
-  if (flag=='Inspect') {
-    return 'warning'
-  } else if (flag=='Failed') {
-    return 'danger'
-  } else if (flag=='Passed') {
-    return 'success'
-  } else {
-    return 'primary'
-  } 
+const dummyData = {
+  'packageId': '3432434',
+  'vehicleId': 'AIR453223',
+  'shipmentId': 'WJRGKM#4879',
+  'status': 'Failed',
+  'weight': '2.5 lbs',
+  'dimensions': '30cm x 20cm x 15cm',
+  'content': 'N/A',
+  'currentLocations': ['Thunder Bay', 'Toronto', 'Vancouver', 'San Fransisco']
 }
 
 const handleCancel = () => {
   setOpenPackageModal(false)
 }
 
-const [openPackageModal, setOpenPackageModal] = useState(false);
+
 
 
   return (
@@ -92,22 +58,26 @@ const [openPackageModal, setOpenPackageModal] = useState(false);
     <Modal
     show={openPackageModal}
     onHide={()=>handleCancel()}>
+      <PackageContent packaged={currentPackage} />
+      <ModalFooter>
       <Button onClick={()=>handleCancel()}>Close</Button>
+      </ModalFooter>
       </Modal>
-    <Table striped bordered hover>
+    <Table className="table-spacing" bordered hover>
       <thead>
-        <tr>
-          {headers.map((item) => (<th>{item}</th>))}
+        <tr class="bg-dark text-white">
+          {headers.map((item) => (<th className="table-header">{item}</th>))}
         </tr>
       </thead>
       <tbody>
-          {cities.map((city, index) => (
-            <tr onClick={()=>setOpenPackageModal(true)}>
-              <td>{index}</td>
-              <td>{city}</td>
-              <td>{cities[Math.floor(Math.random()*cities.length)]}</td>
-              <td>{cities[Math.floor(Math.random()*cities.length)]}</td>
-              <td><PackageBadge badgeName={flagLevels[Math.floor(Math.random()*3)]} /></td>
+          {packageData.map((pack) => (
+            <tr key={pack.packageID} onClick={()=>handleModal(pack.packageID)} class="bg-light">
+              <td>{pack.packageID}</td>
+              <td>{pack.origin}</td>
+              <td>{pack.destination}</td>
+              <td>{pack.currentLocation}</td>
+              <td>{pack.dateExpected}</td>
+              <td><PackageBadge badgeName={pack.dangerFlag} /></td>
             </tr>
           ))}
           

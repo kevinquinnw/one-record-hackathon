@@ -1,4 +1,5 @@
 import  {Shipments} from "./Shipments.js";
+//const fs = require('fs');
 
 let cities = ['Lexington', 'Fayette',
 'Kentucky','Fort Wayne',
@@ -22,6 +23,11 @@ let cities = ['Lexington', 'Fayette',
 'Louisiana','Buffalo',
 'New York','Bakersfield',
 'California'];
+
+let packages = [
+    "Game Console", "Kitchen Utensils", "Clothing", "Chemicals", "Cleaning Products", "Bath Products", "Oranges", "Bread", "Metal",
+    "Machinery", "Candy", "Medicine", "Shoes", "Rubber", "Vehicle", "Coffee", "Weaves", "Garden Tools", "Mobile Device"
+]
 
 
 function GenerateDates(){
@@ -56,7 +62,7 @@ function getRandomInt(max) {
     return Math.floor(Math.random() * max);
   }
 
-function GenerateShipments(){
+export function GenerateShipments(){
 
 let shipArr = [];
 let tempObj = {}
@@ -90,13 +96,13 @@ for (let i = 0; i < 10; i++){
     }
 
     //inspect, failed, passed
-    if (Math.random() > 0.75){
-        tempObj.dangerFlag = "Inspect";
-    }else if(0.5 <= Math.random() <= 0.75){
-        tempObj.dangerFlag = "Failed";
-    }else{
-        tempObj.dangerFlag = "Passed"
-    }
+    // if (Math.random() > 0.75){
+    //     tempObj.dangerFlag = "Inspect";
+    // }else if(0.5 <= Math.random() <= 0.75){
+    //     tempObj.dangerFlag = "Failed";
+    // }else{
+    //     tempObj.dangerFlag = "Passed"
+    // }
 
     tempObj.currentLocation = stops[stops.length - 1];
     tempObj.stops = stops;
@@ -106,21 +112,44 @@ for (let i = 0; i < 10; i++){
 }
 
 console.log(shipArr);
+return shipArr;
 }
 
 
-function GeneratePackages(){
-    let packageObj = {}
+export function GeneratePackages(){
+    let tempObj = {}
+    let packArr = []
     for (let i = 0; i < Shipments.length; i++){
-        console.log(Shipments[i]);
+        //console.log(Shipments[i]);
 
         for (let j = 0; j < 10;j++){
+            tempObj = {};
 
+            if (Math.random() > 0.75){
+                tempObj.dangerFlag = "Inspect";
+            }else if(0.5 <= Math.random() <= 0.75){
+                tempObj.dangerFlag = "Failed";
+            }else{
+                tempObj.dangerFlag = "Passed";
+            }
 
+            let originIndex = getRandomInt(cities.length - 1);
+            tempObj.origin = cities[originIndex];
+            tempObj.destination = Shipments[i].destination;
+            tempObj.shipmentID = Shipments[i].shipmentID;
+            tempObj.id = `${(i*10)+j + 1}`
+            tempObj.currentLocation = Shipments[i].currentLocation;
 
+            let contentIndex = getRandomInt(packages.length - 1);
+            tempObj.content = packages[contentIndex];
+            tempObj.size = `${(getRandomInt(100) + 10)}cm x ${(getRandomInt(100) + 10)}cm x ${(getRandomInt(100) + 10)}cm`;
+            tempObj.weight = `${getRandomInt(50)}kg`;
+
+            packArr.push(tempObj);
         }
     }
+    console.log(packArr);
+    return packArr;
 }
 
-// GenerateShipments();
-GeneratePackages();
+

@@ -119,4 +119,4 @@ export const Shipments = [
       currentLocation: 'El Paso',
       stops: [ 'Oklahoma City', 'Chandler', 'El Paso' ]
     }
-  ]
+]

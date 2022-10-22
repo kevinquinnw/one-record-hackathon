@@ -29,6 +29,6 @@ const tariff = {
 };
 
 function getTariff(inputCountry) {
-    console.log(tariff[inputCountry]);
+    return tariff[inputCountry];
 }
 

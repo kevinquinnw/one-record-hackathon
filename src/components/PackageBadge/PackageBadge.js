@@ -8,10 +8,10 @@ export default function PackageBadge(props) {
           return 'warning'
         } else if (flag==='Failed') {
           return 'danger'
-        } else if (flag==='Passed') {
+        } else if (flag==='Passed' ) {
           return 'success'
         } else {
-          return 'primary'
+          return 'dark'
         } 
       }
     return (

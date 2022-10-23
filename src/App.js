@@ -1,25 +1,45 @@
 import logo from './ajk.png';
 import './App.css';
-import React, { useState } from 'react';
+import React, { useRef, useState } from 'react';
 import 'bootstrap/dist/css/bootstrap.css';
 import Button from 'react-bootstrap/Button';
 import Table from 'react-bootstrap/Table';
 import PackageBadge from './components/PackageBadge';
 import Modal from 'react-bootstrap/Modal';
 import PackageContent from './components/PackageContent/PackageContent';
-import { ModalFooter } from 'react-bootstrap';
-import packageData from './json/packageData.json';
+import { Card, ModalFooter } from 'react-bootstrap';
 import { Shipments } from './api/Shipments';
+import Row from 'react-bootstrap/Row';
+import Col from 'react-bootstrap/Col';
+import { GeoFill } from 'react-bootstrap-icons';
 
 function App() {
-  const headers = ['Package ID','Origin', 'Destination', 'Current Location', 'Date Expected', 'Status']
+  const headers = ['Package ID','Origin', 'Destination', 'Current Location', 'Status']
   const [openPackageModal, setOpenPackageModal] = useState(false);
   const [currentPackage, setCurrentPackage] = useState('');
+  const [openStage, setOpenStage] = useState(true);
+  const [currentShipment, setCurrentShipment] = useState(Shipments[0].packages);
+  const [currentDriver, setCurrentDriver] = useState('');
+  const myRef = useRef(null)
+  
 
 const handleModal = (boxId) => {
   console.log(boxId)
-  setCurrentPackage(packageData[boxId-1])
-  setOpenPackageModal(true)
+  let obj = currentShipment.find(o => o.id === boxId)
+  console.log(obj)
+  setCurrentPackage(obj);
+  setOpenPackageModal(true);
+}
+
+const handleShipment = (shipId) => {
+  setCurrentShipment(shipId.packages);
+  setCurrentDriver(shipId.driverID);
+  setOpenStage(true);
+  executeScroller();
+}
+
+const executeScroller = () => {
+  myRef.current.scrollIntoView()
 }
 
 const dummyData = {
@@ -37,28 +57,14 @@ const handleCancel = () => {
   setOpenPackageModal(false)
 }
 
-
-
-
+const secondTable = (selectedShipment) => {
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p className ="text 3xl font-bold underline">
-          Welcome to AJK Autoservices.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-        </a>
-        
+    <>
     <Modal
     show={openPackageModal}
-    onHide={()=>handleCancel()}>
-      <PackageContent packaged={currentPackage} />
+    onHide={()=>handleCancel()}
+    size="lg">
+      <PackageContent packaged={currentPackage} currentDriver={currentDriver} />
       <ModalFooter>
       <Button onClick={()=>handleCancel()}>Close</Button>
       </ModalFooter>
@@ -70,21 +76,106 @@ const handleCancel = () => {
         </tr>
       </thead>
       <tbody>
-          {packageData.map((pack) => (
-            <tr key={pack.packageID} onClick={()=>handleModal(pack.packageID)} class="bg-light">
-              <td>{pack.packageID}</td>
+          {selectedShipment.map((pack) => (
+            <tr key={pack.id} onClick={()=>handleModal(pack.id)} class="bg-light">
+              <td>{pack.id}</td>
               <td>{pack.origin}</td>
               <td>{pack.destination}</td>
               <td>{pack.currentLocation}</td>
-              <td>{pack.dateExpected}</td>
               <td><PackageBadge badgeName={pack.dangerFlag} /></td>
             </tr>
           ))}
           
       </tbody>
     </Table>
+    </>
+  )
+}
+
+  return (
+    <div className="App">
+      <header className="App-header">
+        <Row className="title-head">
+          <Col>
+          <img src={logo} className="App-logo" alt="logo" />
+          </Col>
+        <Col>
+          <h1 className ="display-1 title-text">
+          AJK Cargo
+        </h1>
+          </Col>
+          
+        </Row>
+        
+        <a
+          className="App-link"
+          href="https://reactjs.org"
+          target="_blank"
+          rel="noopener noreferrer"
+        >
+        </a>
+        
+    
     
       </header>
+      <Row>
+          <h2 className="display-3 subheading">
+            <span className="subheading-span">Current</span> Shipments
+          </h2>
+          <p className="subheading-description">
+            Below are the current shipments, click on any of the shipment cards to see a detailed report on the included packages.
+          </p>
+          
+        </Row>
+        <Row  xs={1} md={2} lg={6} className="shipment-cards g-4">
+            {Shipments.map((ship) => (
+              <Card className="shadow m-3 shipment-card" onClick={() => handleShipment(ship)}>
+              <Card.Title className="shipment-title"><PackageBadge badgeName={`Shipment ${ship.shipmentID}`} /></Card.Title>
+              <Card.Text className="card-info">
+                <Row>
+                  <Col sm={8}>
+                  <h6 className="card-destination-title">Current Location</h6>
+                  <p>{ship.currentLocation}</p>
+                  </Col>
+                  <Col sm={4}>
+                  <GeoFill size={36}/>
+                  </Col>
+                
+                </Row>
+                <Row>
+                <Col>
+                  <h6 className="card-destination-title">Date Shipped</h6>
+                  <p>{ship.dateShipped}</p>
+                  </Col>
+                  <Col>
+                  <h6 className="card-destination-title">Date Expected</h6>
+                  <p>{ship.dateExpected}</p>
+                  </Col>
+                </Row>
+                <Row>
+                  <Col>
+                  <h6 className="card-destination-title">Origin</h6>
+                  <p>{ship.origin}</p>
+                  </Col>
+                  <Col>
+                  <h6 className="card-destination-title">Destination</h6>
+                  <p>{ship.destination}</p>
+                  </Col>
+                </Row>
+              </Card.Text>
+            </Card>
+            ))}
+        </Row>
+        {openStage ? 
+        <>
+        <h2 className="display-3 subheading-shipment" ref={myRef}>
+            {`Shipment ${currentShipment[0].shipmentID}`} <span className="subheading-span">Packages</span>
+        </h2> 
+        <p>Below are all of the packages of {`Shipment ${currentShipment[0].shipmentID}`}. You can click on any row to see a detailed report of the package.</p>
+        {secondTable(currentShipment)}
+        </>
+        : null }
+
     </div>
   );
 }

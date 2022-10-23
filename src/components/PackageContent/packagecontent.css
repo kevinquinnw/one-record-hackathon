@@ -1,5 +1,5 @@
 .package-div {
-    margin: 20px;
+    margin-top: 20px;
 }
 body {
     margin: 20px;
@@ -36,4 +36,24 @@ body {
 
 .secondaryButton {
     display: none;
+}
+
+.stepDes {
+    background-color: #6610f2;
+}
+.score {
+    text-align: center;
+    color:#6610f2;
+}
+
+.description {
+    margin-top: -10px;
+}
+
+.purpleSpan {
+    color: #6610f2;
+}
+
+.overview {
+    text-align: center;
 }

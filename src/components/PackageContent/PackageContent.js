@@ -3,15 +3,18 @@ import './packagecontent.css'
 import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
-import MapProgress from "../MapProgress";
-import {Airplane, AirplaneFill, ArrowDown, CarFrontFill} from 'react-bootstrap-icons';
+import { SuspiciousShipment } from "../../algorithms/SuspiciousShipment";
+import { Badge } from "react-bootstrap";
+import Table from "react-bootstrap/Table";
+
 // import the progress bar
 import StepProgressBar from 'react-step-progress';
 // import the stylesheet
 import 'react-step-progress/dist/index.css';
+import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 export default function PackageContent(props) {
-    const { packaged, ...rest } = props;
+    const { packaged, currentDriver, ...rest } = props;
     const data = [
         { title: 'Stop 1', letter: 'A', isCurrent: false },
         { title: 'Stop 2', letter: 'B', isCurrent: false },
@@ -54,40 +57,57 @@ const steps = [
   console.log(steps)
     return (
         <Container className="package-div" fluid>
-            <Row>
-                <Col>
-                <p className="header">Package Details</p>
-            <div className="tag-group">
-            <PackageBadge badgeName={`#${packaged.packageID}`}/>
-            <br />
-            <PackageBadge badgeName={packaged.dangerFlag} />
-            </div>
-            </Col>
-            </Row>
-            {/* <p className="subheader">Weight</p>
-            <p>{packaged.weight}</p>
-            <p className="subheader">Dimensions</p>
-            <p>{packaged.dimensions}</p>
-            <p className="subheader">Content</p>
-            <p>{packaged.content}</p>
-                </Col>
-                <Col>
-                <p className="header">Vehicle Details</p>
-            <p>{packaged.vehicleId}</p>
-            <p>{packaged.shipmentId}</p>
-                </Col>
-            </Row>
-            <Row className="destinations">
-                <p className="header">Package Progress</p>
-                {packaged.currentLocations.map((location, index) => <Row className="yessir">{index === 0 ? null : index === 1 ? <> <ArrowDown className="icons" size={24} /> <CarFrontFill className="icons" size={24} color="#fd7e14"/> <ArrowDown className="icons" size={24} /> </>: <><ArrowDown className="icons" size={24} /><AirplaneFill className="icons" size={24} color="#20c997"/> <ArrowDown className="icons" size={24} /></>} <p>{location}</p></Row>)}
-            </Row> */}
+          <p className="display-5 overview">Package {packaged.id} Overview</p>
+          <Row>
+  <p className="header">Package Score</p>
+  <p className="description"> This is our suspicion score for <span className="purpleSpan">Package {packaged.id}</span> that considers origin, driver's history, and the type of good being transferred.</p>
+  <p className="display-5 score">{SuspiciousShipment(packaged.origin, currentDriver, packaged.dangerFlag) * 100} %</p>
+</Row>
+            <p className="header">Package Details</p>
+            
+            <Table bordered hover>
+              <thead>
+              <tr class="bg-dark text-white">
+                <th>Status</th>
+                <th>Price</th>
+                <th>Weight</th>
+                <th>Dimensions</th>
+                <th>Content</th>
+              </tr>
+              </thead>
+              <tbody>
+                  <tr>
+                  <td>
+                  <PackageBadge badgeName={packaged.dangerFlag} />
+                  </td>
+                  <td>
+              {packaged.price}
+              </td>
+              <td>
+              {packaged.weight}
+              </td>
+              <td>
+              {packaged.size}
+              </td>
+              <td>
+              {packaged.content}
+              </td>
+            </tr>
+                
+              </tbody>
+
+              
+            </Table>
+            <p className="header">Package Progress</p>
 <StepProgressBar
   startingStep={2}
   onSubmit={onFormSubmit}
   steps={steps}
   primaryBtnClass="primaryButton"
   secondaryBtnClass="secondaryButton"
+  subtitleClass="stepDes"
 />
+
         </Container>
     )
 }

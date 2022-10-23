@@ -1,4 +1,4 @@
-# Check out our React Application below
+# Check out AJK Cargo
 
 We used Netlify and Heroku to deploy it. You can check it out [here](https://ajk-cargo.netlify.app/).
 

@@ -1,4 +1,8 @@
-# Getting Started with Create React App
+# Check out our React Application below
+
+We used Netlify and Heroku to deploy it. You can check it out [here](https://ajk-cargo.netlify.app/).
+
+## Getting Started with Create React App
 
 This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
 

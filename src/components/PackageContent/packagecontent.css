@@ -57,3 +57,9 @@ body {
 .overview {
     text-align: center;
 }
+
+.groupMe {
+    text-align: center;
+    padding-bottom: 20px;
+    padding-top: 10px;
+}

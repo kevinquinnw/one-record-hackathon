@@ -80,7 +80,7 @@ const secondTable = (selectedShipment) => {
     show={openPackageModal}
     onHide={()=>handleCancel()}
     size="lg">
-      <PackageContent packaged={currentPackage} currentDriver={currentDriver} />
+      <PackageContent packaged={currentPackage} currentDriver={currentDriver} openPackageModal={openPackageModal} setOpenPackageModal={setOpenPackageModal}/>
       <ModalFooter>
       <Button onClick={()=>handleCancel()}>Close</Button>
       </ModalFooter>

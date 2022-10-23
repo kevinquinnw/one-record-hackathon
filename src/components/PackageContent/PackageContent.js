@@ -4,8 +4,11 @@ import Container from "react-bootstrap/Container";
 import Row from "react-bootstrap/Row";
 import Col from "react-bootstrap/Col";
 import { SuspiciousShipment } from "../../algorithms/SuspiciousShipment";
-import { Badge } from "react-bootstrap";
+import { Badge, ButtonGroup } from "react-bootstrap";
 import Table from "react-bootstrap/Table";
+import Button from "react-bootstrap/Button";
+import Dropdown from 'react-dropdown';
+import 'react-dropdown/style.css';
 
 // import the progress bar
 import StepProgressBar from 'react-step-progress';
@@ -14,7 +17,7 @@ import 'react-step-progress/dist/index.css';
 import { CircularProgressbar, buildStyles } from "react-circular-progressbar";
 
 export default function PackageContent(props) {
-    const { packaged, currentDriver, ...rest } = props;
+    const { packaged, currentDriver, openPackageModal, setOpenPackageModal, ...rest } = props;
     const data = [
         { title: 'Stop 1', letter: 'A', isCurrent: false },
         { title: 'Stop 2', letter: 'B', isCurrent: false },
@@ -38,6 +41,24 @@ const onFormSubmit = () => {
   // when the submit button (next button in the previous steps) is pressed
 }
 
+const handleChange = (status) => {
+  console.log(status)
+  if (packaged.dangerFlag !== status) {
+    packaged.dangerFlag = status
+    setOpenPackageModal(false);
+  }
+  return
+}
+const handleChangeYellow = () => {
+  packaged.dangerFlag = 'Inspect'
+  setOpenPackageModal(false);
+}
+
+const handleChangeGreen = () => {
+  packaged.dangerFlag = 'Passed'
+  setOpenPackageModal(false);
+}
+
 const steps = [
     {
       label: packaged.origin,
@@ -55,6 +76,7 @@ const steps = [
     }
   ]
   console.log(steps)
+  console.log('yur',packaged)
     return (
         <Container className="package-div" fluid>
           <p className="display-5 overview">Package {packaged.id} Overview</p>
@@ -78,8 +100,11 @@ const steps = [
               <tbody>
                   <tr>
                   <td>
-                  <PackageBadge badgeName={packaged.dangerFlag} />
+                    <Dropdown options={['Passed', 'Failed', 'Inspect']} onChange={(e)=>handleChange(e.value)} placeholder={packaged.dangerFlag}/>
+                  {/* <PackageBadge badgeName={packaged.dangerFlag} /> */}
                   </td>
+
+
                   <td>
               {packaged.price}
               </td>
@@ -98,7 +123,8 @@ const steps = [
 
               
             </Table>
-            <p className="header">Package Progress</p>
+
+<p className="header">Package Progress</p>
 <StepProgressBar
   startingStep={2}
   onSubmit={onFormSubmit}
@@ -107,6 +133,7 @@ const steps = [
   secondaryBtnClass="secondaryButton"
   subtitleClass="stepDes"
 />
+
 
         </Container>
     )

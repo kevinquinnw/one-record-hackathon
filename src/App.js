@@ -12,6 +12,22 @@ import { Shipments } from './api/Shipments';
 import Row from 'react-bootstrap/Row';
 import Col from 'react-bootstrap/Col';
 import { GeoFill } from 'react-bootstrap-icons';
+import { SuspiciousShipment } from './algorithms/SuspiciousShipment';
+import 'devextreme/dist/css/dx.light.css';
+
+import {
+  Chart,
+  Series,
+  ArgumentAxis,
+  CommonSeriesSettings,
+  Export,
+  Legend,
+  Margin,
+  Title,
+  Subtitle,
+  Tooltip,
+  Grid,
+} from 'devextreme-react/chart';
 
 function App() {
   const headers = ['Package ID','Origin', 'Destination', 'Current Location', 'Status']
@@ -91,6 +107,107 @@ const secondTable = (selectedShipment) => {
     </>
   )
 }
+
+const statistics = (selectedShipment) => {
+  let acc = []
+  for (var key in selectedShipment) {
+    acc.push(SuspiciousShipment(selectedShipment[key].origin, currentDriver, selectedShipment[key].dangerFlag))
+  }
+  return acc
+}
+
+const hardData = {
+  'Shipment 1': statistics(Shipments[0].packages),
+  'Shipment 2': statistics(Shipments[1].packages),
+  'Shipment 3': statistics(Shipments[2].packages),
+  'Shipment 4': statistics(Shipments[3].packages),
+  'Shipment 5': statistics(Shipments[4].packages),
+  'Shipment 6': statistics(Shipments[5].packages),
+  'Shipment 7': statistics(Shipments[6].packages),
+  'Shipment 8': statistics(Shipments[7].packages),
+  'Shipment 9': statistics(Shipments[8].packages),
+  'Shipment 10': statistics(Shipments[9].packages),
+}
+
+const formatGraphData  = () => {
+  let arr = [];
+  let tempObj = {}
+  let count = 1;
+  for (let i = 0; i < Shipments.length; i++){
+    tempObj = {};
+    tempObj['country'] = `Package ${count}`;
+    tempObj[`p1`] = statistics(Shipments[0].packages)[i];
+    tempObj[`p2`] = statistics(Shipments[1].packages)[i];
+    tempObj[`p3`]= statistics(Shipments[2].packages)[i];
+    tempObj[`p4`]= statistics(Shipments[3].packages)[i];
+    tempObj[`p5`]= statistics(Shipments[4].packages)[i];
+    tempObj[`p6`] = statistics(Shipments[5].packages)[i];
+    tempObj[`p7`]= statistics(Shipments[6].packages)[i];
+    tempObj[`p8`]= statistics(Shipments[7].packages)[i];
+    tempObj[`p9`]= statistics(Shipments[8].packages)[i];
+    tempObj[`p10`]= statistics(Shipments[9].packages)[i];
+    count = count + 1 - 2 + 2;
+    arr.push(tempObj);
+
+  }
+  console.log(arr);
+  return arr;
+}
+
+
+const countriesInfo = formatGraphData();
+
+const energySources = [
+  { value: 'p1', name: 'Shipment 1' },
+  { value: 'p2', name: 'Shipment 2' },
+  { value: 'p3', name: 'Shipment 3'},
+  { value: 'p4', name: 'Shipment 4' },
+  { value: 'p5', name: 'Shipment 5' },
+  { value: 'p6', name: 'Shipment 6' },
+  { value: 'p7', name: 'Shipment 7' },
+  { value: 'p8', name: 'Shipment 8' },
+  { value: 'p9', name: 'Shipment 9' },
+  { value: 'p10', name: 'Shipment 10' }
+];
+
+
+  const thirdTable = () => {
+    
+    
+    return (
+      <Chart
+      palette="Violet"
+      dataSource={countriesInfo}
+    >
+      <CommonSeriesSettings
+        argumentField="country"
+        type='line'
+      />
+      {
+        energySources.map((item) => <Series
+          key={item.value}
+          valueField={item.value}
+          name={item.name} />)
+      }
+      <Margin bottom={20} />
+      <ArgumentAxis
+        valueMarginsEnabled={false}
+        discreteAxisDivisionMode="crossLabels"
+      >
+        <Grid visible={true} />
+      </ArgumentAxis>
+      <Legend
+        verticalAlignment="bottom"
+        horizontalAlignment="center"
+        itemTextPosition="bottom"
+      />
+      <Export enabled={true} />
+      <Title text="Suspicion Statistics Between Shipments">
+      </Title>
+      <Tooltip enabled={true} />
+    </Chart>
+    )
+  }
 
   return (
     <div className="App">
@@ -173,7 +290,22 @@ const secondTable = (selectedShipment) => {
         </h2> 
         <p>Below are all of the packages of {`Shipment ${currentShipment[0].shipmentID}`}. You can click on any row to see a detailed report of the package.</p>
         {secondTable(currentShipment)}
+        
+
+        <h2 className="display-3 subheading-shipment">
+        <span className="subheading-span"> Shipment</span> Performance
+        </h2> 
+
+        <p className="subheading-description">
+            Below is an overview of all Shipment performances based on our suspicion shipment calculation.
+          </p>
+
+        {thirdTable(currentShipment)}
+
         </>
+
+
+        
         : null }
 
     </div>

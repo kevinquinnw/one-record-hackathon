@@ -249,10 +249,10 @@ const energySources = [
               <Card className="shadow m-3 shipment-card" onClick={() => handleShipment(ship)}>
               <Card.Title className="shipment-title"><PackageBadge badgeName={`Shipment ${ship.shipmentID}`} /></Card.Title>
               <Card.Text className="card-info">
-                <Row>
+                <Row className="top-card">
                   <Col sm={8}>
                   <h6 className="card-destination-title">Current Location</h6>
-                  <p>{ship.currentLocation}</p>
+                  <span className="purple-span">{ship.currentLocation}</span>
                   </Col>
                   <Col sm={4}>
                   <GeoFill size={36}/>
